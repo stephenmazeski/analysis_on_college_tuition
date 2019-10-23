@@ -1,0 +1,68 @@
+---
+title: "Analysis of the Worth of Attending College in 2019"
+output: html_notebook
+---
+
+##S.R. Mazeski <br /> 
+###Senior Computational Data Science student at The Pennsylvania State University
+stephenmazeski@gmail.com <br /> 
+stephenmazeski.com
+
+
+
+```{r}
+library(mosaic)
+library(tidyverse)
+library(DataComputing)
+library(lubridate)
+
+
+
+```
+
+```{r}
+# Data has been hard imported into Avg_CPI
+# CPI is the Consumer Price Index for the USA. Below is the head of the data along with an explination of its importance in this analysis.
+
+head(Avg_CPI)
+
+```
+
+
+```{r}
+# Log Graph of CPI highlights change in Average CPI.
+ggplot(data=Avg_CPI,aes(x=YEAR,y=AVE.))+geom_point()+scale_y_log10() + geom_smooth() + labs(title = "US Avg CPI History", caption = "Based on data from inflationdata.com")
+
+```
+
+
+
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -42,8 +42,13 @@ We can use this as a tool to guage the worth of USD over the course of the last 
 
 
 ```{r}
-
-
+g <- ggplot(data = WageGap) + 
+  geom_point(aes(x = Year, y = Lowest,colour = "Lowest")) +
+  geom_point(aes(x = Year, y = Second, colour = "Second"))+
+  geom_point(aes(x = Year, y = Third, colour = "Third")) +
+  geom_point(aes(x = Year, y = Fourth, colour = "Fourth"))+
+  geom_point(aes(x = Year, y = Fifth, colour = "Fifth"))
+g + ylab("Household Income by Class") + scale_shape_discrete()
 ```
 
 

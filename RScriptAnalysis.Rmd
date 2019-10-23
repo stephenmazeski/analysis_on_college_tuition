@@ -34,11 +34,15 @@ head(Avg_CPI)
 ggplot(data=Avg_CPI,aes(x=YEAR,y=AVE.))+geom_point()+scale_y_log10() + geom_smooth() + labs(title = "US Avg CPI History", caption = "Based on data from inflationdata.com")
 
 ```
+"The Consumer Price Index (CPI-U) is said to be based upon a 1982 Base for ease of thought. But in actuality the BLS set the index to an average for the period from 1982 through 1984 (inclusive) equal to 100, so there is no specific date when it was exactly 100. (If you check the chart below you will see it was somewhere between July and August of 1983.)
+Note: Due to the width of the table, this page is best viewed full screen or as wide as possible." Via inflationdata.com
 
+We can use this as a tool to guage the worth of USD over the course of the last century.
 
 
 
 ```{r}
+
 
 ```
 

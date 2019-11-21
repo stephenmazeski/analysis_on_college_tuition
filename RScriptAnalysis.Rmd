@@ -38,10 +38,12 @@ ggplot(data=Avg_CPI,aes(x=YEAR,y=AVE.))+geom_point()+scale_y_log10() + geom_smoo
 Note: Due to the width of the table, this page is best viewed full screen or as wide as possible." Via inflationdata.com
 
 We can use this as a tool to guage the worth of USD over the course of the last century.
-
-
-
 ```{r}
+head(WageGap)
+```
+```{r}
+#with and without education
+
 
 g <- ggplot(data = WageGap) + 
   geom_point(aes(x = Year, y = Lowest,colour = "Lowest")) +
@@ -50,12 +52,29 @@ g <- ggplot(data = WageGap) +
   geom_point(aes(x = Year, y = Fourth, colour = "Fourth"))+
   geom_point(aes(x = Year, y = Fifth, colour = "Fifth"))
 
-g + ylab("Household Income by Class") + scale_shape_discrete() + labs(title = "Wages by Five Distinct Classes in the US", caption = "Based on data from The US Census Bureau")
+g + ylab("Household Income by Class") + scale_shape_discrete() + labs(title = "Wages by Five Distinct Classes in the US", caption = "Based on data from The US Census Bureau")+ scale_color_discrete(breaks=c("Fifth", "Fourth", "Third", "Second", "Lowest"))
 ```
 
+```{r}
+Income_Per_Ed <- Income_Per_education %>% select(Quentile, Less.than.High.School, High.School, Some.College.or.Associates, Bachelor.s.Degree..)
+head(Income_Per_Ed)
+
+```
+
+```{r}
+Income_Per_Ed$Quentile <- factor(Income_Per_Ed$Quentile, levels=c("Lowest", "Second", "Third", "Fourth", "Fifth"))
+g2 <- ggplot(data = Income_Per_Ed) + 
+  geom_point(aes(x = Quentile, y = Less.than.High.School,colour = "Less than HS")) +
+  geom_point(aes(x = Quentile, y = High.School, colour = "High School"))+
+  geom_point(aes(x = Quentile, y = Some.College.or.Associates, colour = "Some College/Associates")) +
+  geom_point(aes(x = Quentile, y = Bachelor.s.Degree.., colour = "Bachelors Degree +"))
+
+g2 + ylab("Number of People") + scale_shape_discrete() + labs(title = "Income Quentile by Education Level", caption = "Based on data from The bls.gov")+ scale_color_discrete(breaks=c("Less than HS", "High School", "Some College/Associates", "Bachelors Degree +"))
 
 
+```
 
+Clearly by this graphic, the cieling of earnings and number of jobs that allow people to climb to such wages are aided with further education.
 
 
 

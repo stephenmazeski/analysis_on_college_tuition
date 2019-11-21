@@ -16,7 +16,9 @@ library(tidyverse)
 library(DataComputing)
 library(lubridate)
 
-
+#F 50
+#G 123
+#H 105
 
 ```
 
@@ -69,7 +71,7 @@ g2 <- ggplot(data = Income_Per_Ed) +
   geom_point(aes(x = Quentile, y = Some.College.or.Associates, colour = "Some College/Associates")) +
   geom_point(aes(x = Quentile, y = Bachelor.s.Degree.., colour = "Bachelors Degree +"))
 
-g2 + ylab("Number of People") + scale_shape_discrete() + labs(title = "Income Quentile by Education Level", caption = "Based on data from The bls.gov")+ scale_color_discrete(breaks=c("Less than HS", "High School", "Some College/Associates", "Bachelors Degree +"))
+g2 + ylab("Weekly Earnings") + scale_shape_discrete() + labs(title = "Earnings Described by Education Level", caption = "Based on data from The bls.gov")+ scale_color_discrete(breaks=c("Less than HS", "High School", "Some College/Associates", "Bachelors Degree +"))
 
 
 ```
@@ -78,19 +80,56 @@ Clearly by this graphic, the cieling of earnings and number of jobs that allow p
 
 
 
+What if we can use an Auto-Regressive Moving Average to predict the CPI of the future?
+```{r}
+## First we implement a random walk ARIMA model
+A_Data <- Avg_CPI$AVE.
+B_Data <- Avg_CPI$YEAR
+Future_CPI <- arima(A_Data, order = c(0,1,0))
+m <- predict(Future_CPI, n.ahead = 10)
+```
+
+```{r}
+m$se
+
+```
+
+This doesn't look very good to me. It seems as though the model predicts very inconsistently and when we refer back to the data, we can see this is true.
+
+```{r}
+head(Avg_CPI)
+
+```
+```{r}
+## Now we implement a random walk ARIMA model with autocorrelation. Here we lag by 1 and autocorrect in order to create a more likely model.
+A_Data <- Avg_CPI$AVE.
+B_Data <- Avg_CPI$YEAR
+Future_CPI <- arima(A_Data, order = c(1,1,0))
+m2 <- predict(Future_CPI, n.ahead = 10)
+```
 
 
+```{r}
+m2
+
+```
 
 
+```{r}
+### Keep in mind we are at a CPI of 255.15 today.
 
+TodayCPI = 255.15
+PredictedCPI =c(1.5528,3.3147,5.3092,7.4504,9.6822,11.9657,14.2735,16.5855,18.8872,21.1679)
+ #i = 0
+ PredVector <- rep("", times=length((PredictedCPI)))
+ for(i in seq_along(PredictedCPI)){
+   holder <- (PredictedCPI[i]+TodayCPI)
+   PredVector[i]<-holder
+}
+ PredVector
+```
 
-
-
-
-
-
-
-
+Here we now have predicted CPI values for the future based on ARIMA time-series analysis.
 
 
 

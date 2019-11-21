@@ -1,0 +1,6 @@
+,Quentile,Less than High School,High School,Some College or Associates,Bachelor's Degree +
+,Lowest,367,422,468,658
+,Second,476,548,619,919
+,Third,606,749,874,1383
+,Fourth,783,1090,1258,2064
+,Fifth,1076,1535,1764,2977

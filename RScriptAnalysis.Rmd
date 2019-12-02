@@ -15,6 +15,8 @@ library(mosaic)
 library(tidyverse)
 library(DataComputing)
 library(lubridate)
+library(maps)
+
 #A 52
 #B 191
 #F 50
@@ -198,9 +200,15 @@ head(JoinedDF)
 
 
 ```{r}
-ggplot(data=JoinedDF,aes(x=Year, shape = Quentile))+geom_point(aes(y = High.School, color = 'High School'))+geom_point(aes(y = Less.than.High.School ,color= 'Less than HS'))+ geom_point(aes(y = Some.College.or.Associates, color = 'Some College/Associates'))+ geom_point(aes(y = Bachelor.s.Degree.., color = 'Bachelors Degree +')) + ylab("Weekly Income") + scale_color_discrete(breaks=c("Less than HS", "High School", "Some College/Associates", "Bachelors Degree +"))
+#IncomeByState <- (Untitled.spreadsheet...StateIncome)
+#TuitionByState <- (Untitled.spreadsheet...StateTuitionPrice)
 
+#mergedBYSTATE <- merge(IncomeByState, TuitionByState)
+#head(mergedBYSTATE)
 ```
-
+```{r}
+#plot_usmap("states", data = mergedBYSTATE, values = IncomeByState) +ggplot2::scale_fill_continuous(low = "green", high = "red", guide = FALSE)
+#plot_usmap("states")
+```
 
 

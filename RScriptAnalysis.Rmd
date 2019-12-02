@@ -15,10 +15,15 @@ library(mosaic)
 library(tidyverse)
 library(DataComputing)
 library(lubridate)
-
+#A 52
+#B 191
 #F 50
 #G 123
 #H 105
+
+
+#A 39, 60, 77
+#B 39/60
 
 ```
 
@@ -40,6 +45,42 @@ ggplot(data=Avg_CPI,aes(x=YEAR,y=AVE.))+geom_point()+scale_y_log10() + geom_smoo
 Note: Due to the width of the table, this page is best viewed full screen or as wide as possible." Via inflationdata.com
 
 We can use this as a tool to guage the worth of USD over the course of the last century.
+
+I think that the graph looks messy however with the arbituary AVE. and numbers from ~9 to 300.
+
+I will use data wrangling in order to change this dataframe, and recreate the graphic.
+```{r}
+New_CPI <- Avg_CPI %>% mutate(CPI_Change = AVE./100)
+head(New_CPI)
+
+
+```
+We now havea scalar value that may add more context to the extreme change in CPI.
+Lets regraph the data.
+
+```{r}
+ggplot(data=New_CPI,aes(x=YEAR,y=CPI_Change))+geom_point()+scale_y_log10() + geom_smooth() + labs(title = "US CPI History", caption = "Based on data from inflationdata.com")
+
+```
+
+Lets see if we can create a graphic that highlights the difference in CPI by year.
+```{r}
+AveVec <- Avg_CPI$AVE.
+DifferenceInCPI <- diff(AveVec)
+revDiff <- rev(DifferenceInCPI)
+
+
+
+```
+
+```{r}
+barplot(revDiff, main = "Change in CPI", xlab ="Yearly Change", col = ifelse(revDiff<0, 'red', 'green'))
+
+```
+
+
+
+
 ```{r}
 head(WageGap)
 ```
@@ -54,14 +95,29 @@ g <- ggplot(data = WageGap) +
   geom_point(aes(x = Year, y = Fourth, colour = "Fourth"))+
   geom_point(aes(x = Year, y = Fifth, colour = "Fifth"))
 
-g + ylab("Household Income by Class") + scale_shape_discrete() + labs(title = "Wages by Five Distinct Classes in the US", caption = "Based on data from The US Census Bureau")+ scale_color_discrete(breaks=c("Fifth", "Fourth", "Third", "Second", "Lowest"))
+g + ylab("Household Income (x100)") + scale_shape_discrete() + labs(title = "Wages by Five Distinct Classes in the US", caption = "Based on data from The US Census Bureau")+ scale_color_discrete(breaks=c("Fifth", "Fourth", "Third", "Second", "Lowest"))
 ```
 
 ```{r}
 Income_Per_Ed <- Income_Per_education %>% select(Quentile, Less.than.High.School, High.School, Some.College.or.Associates, Bachelor.s.Degree..)
 head(Income_Per_Ed)
 
+ChangeInGap <- c(WageGap$Fifth - WageGap$Lowest)
+
 ```
+
+```{r}
+revChange <- rev(ChangeInGap)
+
+```
+
+```{r}
+barplot(revChange, main = "Change in Wage Gap", xlab ="Yearly Change", col = ifelse(revDiff<0, 'red', 'green'))
+
+
+```
+This graphic highlights the change in the wage gap from the lowest 20% of Americans versus the top 20% of Americans in household incomes.
+
 
 ```{r}
 Income_Per_Ed$Quentile <- factor(Income_Per_Ed$Quentile, levels=c("Lowest", "Second", "Third", "Fourth", "Fifth"))
@@ -132,6 +188,19 @@ PredictedCPI =c(1.5528,3.3147,5.3092,7.4504,9.6822,11.9657,14.2735,16.5855,18.88
 Here we now have predicted CPI values for the future based on ARIMA time-series analysis.
 
 
+```{r}
+JoinedDF <- merge(Income_Per_Ed, WageGap)
+
+```
+```{r}
+head(JoinedDF)
+```
+
+
+```{r}
+ggplot(data=JoinedDF,aes(x=Year, shape = Quentile))+geom_point(aes(y = High.School, color = 'High School'))+geom_point(aes(y = Less.than.High.School ,color= 'Less than HS'))+ geom_point(aes(y = Some.College.or.Associates, color = 'Some College/Associates'))+ geom_point(aes(y = Bachelor.s.Degree.., color = 'Bachelors Degree +')) + ylab("Weekly Income") + scale_color_discrete(breaks=c("Less than HS", "High School", "Some College/Associates", "Bachelors Degree +"))
+
+```
 
 
 

@@ -9,6 +9,10 @@ stephenmazeski@gmail.com <br />
 stephenmazeski.com
 
 
+The purpose for this project is to take various datasets in order to analyze if pursuing a college degree has the same worth as it has throughout history. The problem comes from multiple reasons that I had identified before analysis. The first reason is the increased percentage of high schoolers attending college each year. BLS.gov has statistics that depict a 20% positive change in all students enrolled in a four year degree program over the last 60 years. With labor jobs become more and more sparse, it makes sense that more students would like to pursue further education, but at what cost?
+
+The second reason is the cost analysis specifically today. How much money are we making today versus 60 years ago when it would cost $500 per semester.
+
 
 ```{r}
 library(mosaic)
@@ -28,6 +32,8 @@ library(maps)
 #B 39/60
 
 ```
+
+My first graphic is focused on the Consumer Price Index (CPI). This index was created in the 80s to track the change in inflation rates yearly. Inflation is expected in any society and a multitude of variables weigh on this index. Some trends we can notice right away from the graphic are positive trends during time of war. Another trend to be noticed is that after the war on Vietnam concluded, inflation has still increased greatly.
 
 ```{r}
 # Data has been hard imported into Avg_CPI
@@ -51,6 +57,7 @@ We can use this as a tool to guage the worth of USD over the course of the last 
 I think that the graph looks messy however with the arbituary AVE. and numbers from ~9 to 300.
 
 I will use data wrangling in order to change this dataframe, and recreate the graphic.
+
 ```{r}
 New_CPI <- Avg_CPI %>% mutate(CPI_Change = AVE./100)
 head(New_CPI)
@@ -80,7 +87,7 @@ barplot(revDiff, main = "Change in CPI", xlab ="Yearly Change", col = ifelse(rev
 
 ```
 
-
+Note, there has only every been 13 years since the beginning of the 20th century in which your dollar from the year before could get you more than it could in your current year.
 
 
 ```{r}
@@ -118,8 +125,16 @@ barplot(revChange, main = "Change in Wage Gap", xlab ="Yearly Change", col = ife
 
 
 ```
-This graphic highlights the change in the wage gap from the lowest 20% of Americans versus the top 20% of Americans in household incomes.
+This graphic highlights the change in the wage gap from the lowest 20% of Americans versus the top 20% of Americans in household incomes. Each value of the y-axis represents $1,000. The difference between the lower class and upper class has incresed from $3,000 in the 1970s to over $200,000 just 50 years later. If we were to compare that with the CPI graphic again:
+```{r}
+ggplot(data=New_CPI,aes(x=YEAR,y=CPI_Change))+geom_point()+scale_y_log10() + geom_smooth() + labs(title = "US CPI History", caption = "Based on data from inflationdata.com")
+```
+We see that between 1960 and today, the CPI has increased 10-fold. Arbituary example, a gallon of gas cost $2.80 today, may have cost $.28 then. Interesting to point out that even though the CPI haschanged by 10-fold, the wage gap has increased by 67-fold (based on the wage gap graph).
 
+
+
+
+For this next analysis I have broken groups by education and graphed their income accordingly. It is clear from this graph that a wage gap directly is impacted by those from the upper two classes. Their education creates even a second gap froom their peers in their respective financial classes.
 
 ```{r}
 Income_Per_Ed$Quentile <- factor(Income_Per_Ed$Quentile, levels=c("Lowest", "Second", "Third", "Fourth", "Fifth"))
@@ -138,7 +153,8 @@ Clearly by this graphic, the cieling of earnings and number of jobs that allow p
 
 
 
-What if we can use an Auto-Regressive Moving Average to predict the CPI of the future?
+
+What if we can use an Auto-Regressive Moving Average to predict the CPI of the future? That is, predicting how much your dollar will get you in the next few years.
 ```{r}
 ## First we implement a random walk ARIMA model
 A_Data <- Avg_CPI$AVE.
@@ -178,16 +194,16 @@ m2
 
 TodayCPI = 255.15
 PredictedCPI =c(1.5528,3.3147,5.3092,7.4504,9.6822,11.9657,14.2735,16.5855,18.8872,21.1679)
- #i = 0
+ b = 2019
  PredVector <- rep("", times=length((PredictedCPI)))
  for(i in seq_along(PredictedCPI)){
-   holder <- (PredictedCPI[i]+TodayCPI)
+   holder <- c(PredictedCPI[i]+TodayCPI)
    PredVector[i]<-holder
 }
  PredVector
 ```
 
-Here we now have predicted CPI values for the future based on ARIMA time-series analysis.
+Here we now have predicted CPI values for the future based on ARIMA time-series analysis from 2020 through 2029.
 
 
 ```{r}
@@ -199,16 +215,6 @@ head(JoinedDF)
 ```
 
 
-```{r}
-#IncomeByState <- (Untitled.spreadsheet...StateIncome)
-#TuitionByState <- (Untitled.spreadsheet...StateTuitionPrice)
-
-#mergedBYSTATE <- merge(IncomeByState, TuitionByState)
-#head(mergedBYSTATE)
-```
-```{r}
-#plot_usmap("states", data = mergedBYSTATE, values = IncomeByState) +ggplot2::scale_fill_continuous(low = "green", high = "red", guide = FALSE)
-#plot_usmap("states")
-```
+In conclusion, it looks as though earing a college degree, though it may not pay off initially, may create great opportunity for those as they progress in their career in the USA. With CPI continuing on an upward trend, it is still a good time to earn a degree regardless of the cost of it.
 
 
